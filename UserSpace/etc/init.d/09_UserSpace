@@ -1,0 +1,6 @@
+#!/system/bin/sh
+
+# Insmod the current module
+
+busybox insmod /system/lib/modules/cpufreq_userspace.ko
+
