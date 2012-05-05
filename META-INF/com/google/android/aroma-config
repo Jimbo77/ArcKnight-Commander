@@ -1,0 +1,313 @@
+﻿### LICENSE:
+#
+# Copyright (C) 2011 Ahmad Amarullah ( http://amarullz.com/ )
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+calibrate("0.9718","4","1.0176","-9");
+
+##
+# LANGUAGE
+#
+loadlang("langs/en.lang");
+fontresload( "0", "ttf/DroidSans.ttf", "11" ); #-- "0" = Small Font
+fontresload( "1", "ttf/DroidSans.ttf", "15" ); #-- "1" = Big Font
+
+##
+# Initializing kernel Information
+#
+ini_set("rom_name",             "ArcKnight Modules");
+ini_set("rom_version",          "v1");
+ini_set("rom_author",           "jimbo77");
+ini_set("rom_device",           "Xperia arc (S)");
+ini_set("rom_date",             "May 2012");
+
+##
+# LANGUAGE
+#
+loadlang("langs/en.lang");
+fontresload( "0", "ttf/DroidSans.ttf", "11" ); #-- "0" = Small Font
+fontresload( "1", "ttf/DroidSans.ttf", "15" ); #-- "1" = Big Font
+
+##
+#
+# SHOW ROM INFORMATION
+#
+viewbox(
+  #-- Title
+    "<~welcome.title>",
+  
+  #-- Text
+    "You are about to configure <b>ArcKnight Modules</b> for your device.\n\n"+
+    
+      "  Version\t: <b><#selectbg_g>"+ini_get("rom_version")+"</#></b>\n"+
+      "  Date\t: <b><#selectbg_g>"+ini_get("rom_date")+"</#></b>\n\n"+
+
+    "Press Next to continue.",
+  
+  #-- Icon
+    "@welcome"
+);
+
+##
+#
+# CHANGELOG
+#
+textbox(
+  #-- Title
+    "<~changelog.title>",
+  
+  #-- Subtitle
+    "ArcKnight Modules changelog",
+  
+  #-- Icon
+    "@update",
+  
+  #-- Arg 4
+    resread("changelog.txt")
+);
+
+##
+#
+# SHOW MENUBOX
+#
+menubox(
+  #-- Title
+    "ArcKnight Modules",
+  
+  #-- Sub Title
+    "Select an item below to continue",
+  
+  #-- Icon
+    "@apps",
+    
+  #-- Will be saved in /tmp/aroma/demo.prop
+    "demo.prop",
+    
+  #-------------------------+-----------------[ Menubox Items ]-------------------------+---------------#
+  # TITLE                   |  SUBTITLE                                                 |   Item Icons  #
+  #-------------------------+-----------------------------------------------------------+---------------#
+  
+    "Install",      		"Install modules",       									 "@install",      #-- selected = 1
+    "Uninstall",       		"Uninstall modules",                						 "@install",      #-- selected = 2
+    "Exit",              	"Return to recovery",    			 						 "@alert"   	  #-- selected = 3
+);
+
+##
+# EXIT
+#
+if prop("demo.prop","selected")=="3" then
+	if
+	  confirm(
+		#-- Title
+		  "Exit",
+		#-- Text
+		  "Exit the installer?",
+		#-- Icon (Optional)
+		  "@alert"
+	  )=="yes"
+	then
+	  #-- Exit
+	  exit("");
+	else
+	  back(1);
+	endif;
+endif;
+
+##
+#
+# INSTALL
+#
+if prop("demo.prop","selected")=="1" then
+
+# MAIN FEATURES
+  selectbox(
+    #-- Title
+      "Root Access",
+	  
+    #-- Sub Title
+      "Select the features you want to install",
+	  
+    #-- Icon: <AROMA Resource Dir>/icons/default.png or <ThemeDir>/icon.default.png
+      "@default",
+	  
+    #-- Will be saved in /tmp/aroma/mods.prop
+      "mods.prop",
+	  
+	  #-----------------------------------[ Selectbox With Groups ]----------------------------------#
+	  # TITLE            |  SUBTITLE                                                 | Initial Value #
+	  #------------------+-----------------------------------------------------------+---------------#
+	  
+	  "Root Access",        "",                                                    		2,  #-- Group 1. key = "selected.1"
+	    "Superuser",        "",                               							  1,      #-- selected.1 = 1
+		"SuperSU",          "",                       									  0       #-- selected.1 = 2
+
+	  #--------[ Initial Value = 0: Unselected, 1: Selected, 2: Group Item, 3: Not Visible ]---------#
+  );
+  
+	checkbox(
+    #-- Title
+      "Install",
+	  
+    #-- Sub Title
+      "Select the features you want to install",
+	  
+    #-- Icon: <AROMA Resource Dir>/icons/personalize.png or <ThemeDir>/icon.personalize.png
+      "@apps",
+	  
+    #-- Will be saved in /tmp/aroma/customize.prop
+      "install.prop",
+	  
+	  #------------------------------------------------[ Checkbox Without Group ]----------------------------------------------#
+	  # TITLE            |  SUBTITLE                                                                           | Initial Value #
+	  #------------------+-------------------------------------------------------------------------------------+---------------#
+
+	  "Modules",         	"",                                                                                  2,  #-- Group 1. key = "item.1.x"
+	    "Module 1",           "Description of module 1",      													   0,      #-- item.1.1
+		"Module 2",           "Description of module 2",                          								   0,      #-- item.1.2
+      
+	  "Scrips / Tweaks", 	"",                                                                                  2,  #-- Group 2. key = "item.2.x"
+	    "Script 1",			  "Description of script 1",                       									   0,      #-- item.2.1
+		"Script 2",			  "Description of script 2",                      									   0      #-- item.2.2
+		
+	  #--------[ Initial Value = 0: Unselected, 1: Selected, 2: Group Item, 3: Not Visible ]---------#
+  );
+endif;
+
+##
+#
+# UNINSTALL
+#
+if prop("demo.prop","selected")=="2" then
+	checkbox(
+    #-- Title
+      "Uninstall",
+	  
+    #-- Sub Title
+      "Select the features you want to uninstall",
+	  
+    #-- Icon: <AROMA Resource Dir>/icons/personalize.png or <ThemeDir>/icon.personalize.png
+      "@apps",
+	  
+    #-- Will be saved in /tmp/aroma/customize.prop
+      "uninstall.prop",
+	  
+	  #------------------------------------------------[ Checkbox Without Group ]----------------------------------------------#
+	  # TITLE            |  SUBTITLE                                                                           | Initial Value #
+	  #------------------+-------------------------------------------------------------------------------------+---------------#
+
+	  "Modules",         	"",                                                                                  2,  #-- Group 1. key = "item.1.x"
+	    "Module 1",           "Description of module 1",      													   0,      #-- item.1.1
+		"Module 2",           "Description of module 2",                          								   0,      #-- item.1.2
+      
+	  "Scrips / Tweaks", 	"",                                                                                  2,  #-- Group 2. key = "item.2.x"
+	    "Script 1",			  "Description of script 1",                       									   0,      #-- item.2.1
+		"Script 2",			  "Description of script 2",                      									   0      #-- item.2.2
+		
+	  #--------[ Initial Value = 0: Unselected, 1: Selected, 2: Group Item, 3: Not Visible ]---------#
+  );
+endif;
+
+##
+#
+# Next Screen is Installation UI, So change the next button text to "Install"
+#
+ini_set("text_next", "Proceed");
+
+viewbox(
+  #-- Title
+    "Ready to Configure",
+
+  #-- Text
+    "The wizard is ready to begin.\n\n"+
+	"Press <b>Proceed</b> to continue.\n\n"+
+	"If you want to review or change any of your configuration settings, press <b>Back</b>.\n\n"+
+	"Press Menu -> Quit Installation to exit.",
+
+  #-- Icon
+    "@install"
+);
+
+##
+#
+# Next Button in successfull installation should be back to "Next >"
+#
+ini_set("text_next", "Next >");
+
+
+###################################################################################################################
+#
+# INSTALLATION/DEINSTALLATION PROCESS
+#
+setvar("retstatus",
+  install(
+	#-- Title
+      "Configuring",
+	
+	#-- Process message
+	  "<b>"+ini_get("rom_name")+"</b> are being configured.\n\n"+
+      "It may take several minutes.",
+	
+	#-- Icon
+      "@install",
+	
+	#-- Finish Message
+      "The configuration has completed. Press Next to continue."
+  )
+);
+
+##
+#
+# Next Button is "Finish"
+#
+ini_set("text_next", "Finish");
+
+###################################################################################################################
+#
+# FINISH MESSAGE, Add Checkbox to Reboot or No. Save in "reboot_it" variable
+#
+checkviewbox(
+  #-- Title
+    "Configuration Complete",
+  
+  #-- Text
+    "<b>"+ini_get("rom_name")+"</b> has been configured on your device.",
+	
+  #-- Icon
+    "@welcome",
+
+  #-- Checkbox Text
+    "Reboot now",
+
+  #-- Initial Checkbox value ( 0=unchecked, 1=checked ) -  (Optional, default:0)
+    "1",
+
+  #-- Save checked value in variable "reboot_it" (Optional)
+    "reboot_it"
+);
+
+###
+#
+# Check if reboot checkbox was checked
+if
+  getvar("reboot_it")=="1"
+then
+  #
+  # reboot("onfinish");   - Reboot if anything finished
+  # reboot("now");        - Reboot Directly
+  # reboot("disable");    - If you set reboot("onfinish") before, use this command to revert it.
+  #
+  reboot("onfinish");
+endif;
+
+#---- FINISH
